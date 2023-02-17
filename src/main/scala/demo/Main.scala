@@ -10,17 +10,13 @@ import scala.concurrent.duration.Duration
 
 object Main extends App {
 
-  val system = ActorSystem("PersistenceActor", ConfigFactory.load("application.conf"))
+  val system = ActorSystem("PersistenceActor", ConfigFactory.load("application2.conf"))
 
   val counterPersistentActor = system.actorOf(CounterPersistentActor.props("counter-actor"),
     "CounterPersistentActor")
 
   counterPersistentActor ! Command(Increment(3))
-  //counterPersistentActor ! Command(Increment(4))
-  //counterPersistentActor ! Command(Decrement(2))
   counterPersistentActor ! Checkpoint
-
- // Thread.sleep(1000)
 
  // system.terminate()
 

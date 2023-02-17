@@ -23,13 +23,13 @@ class CounterPersistentActor(id: String, tag: Option[String] = None) extends Per
       println(s"Actor is currently recovering its state")
       updateState(event)
     case SnapshotOffer(_, snapshot: State) =>
-      println(s"Snapshot data: $snapshot")
+      println(s"${Console.MAGENTA_B}Snapshot data: $snapshot${Console.RESET}")
       state = snapshot
   }
 
   override def receiveCommand: Receive = {
     case command @ Command(op) =>
-      println(s"$command is under process")
+      println(s"${Console.GREEN_B}$command is under process${Console.RESET}")
       if(tag.isEmpty) {
         persist(Event(op)) { event =>
           updateState(event)
@@ -42,7 +42,7 @@ class CounterPersistentActor(id: String, tag: Option[String] = None) extends Per
         }
       }
     case Checkpoint =>
-      println(s"Current State: ${state.count}")
+      println(s"${Console.GREEN_B}Current State: ${state.count}${Console.RESET}")
       sender() ! Response(s"Current State: ${state.count}")
   }
 

@@ -1,6 +1,7 @@
 package demo
 
 import akka.actor.{ActorSystem, Props}
+import com.typesafe.config.ConfigFactory
 import demo.models.{Checkpoint, Command, Decrement, Increment}
 import demo.persistence.CounterPersistentActor
 
@@ -9,7 +10,7 @@ import scala.concurrent.duration.Duration
 
 object Main extends App {
 
-  val system = ActorSystem("PersistenceActor")
+  val system = ActorSystem("PersistenceActor", ConfigFactory.load("application.conf"))
 
   val counterPersistentActor = system.actorOf(CounterPersistentActor.props("counter-actor"),
     "CounterPersistentActor")
@@ -22,6 +23,8 @@ object Main extends App {
  // Thread.sleep(1000)
 
  // system.terminate()
+
+  akka.persistence.cassandra.ConfigSessionProvider
 
   Await.result(system.whenTerminated, Duration.Inf)
 }

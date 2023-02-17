@@ -7,7 +7,7 @@ import akka.persistence.query.journal.leveldb.scaladsl.LeveldbReadJournal
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 
-object EventsByTag extends App {
+object EventsByTag /*extends App*/ {
 
   val system = ActorSystem("PersistentQuery")
   val queries = PersistenceQuery(system).readJournalFor[LeveldbReadJournal](LeveldbReadJournal.Identifier)

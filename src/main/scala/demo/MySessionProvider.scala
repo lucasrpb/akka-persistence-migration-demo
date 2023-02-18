@@ -9,10 +9,10 @@ class MySessionProvider() extends SessionProvider {
 
   override def connect()(implicit ec: ExecutionContext): Future[Session] = {
 
-    val cluster = Cluster.builder.addContactPoint("ultron-cassandradb.cassandra.cosmos.azure.com")
+    val cluster = Cluster.builder.addContactPoint("scalable-services.cassandra.cosmos.azure.com")
       .withPort(10350)
-      .withCredentials("ultron-cassandradb",
-        "u6JnZKCV1lDCSXR4OaUp763HRzbZOCIZcFd7GxuAmU6TsdMi3Ytx9NMCZK3r9bXGZ6suh42FkBAZry8OGxSIFg==")
+      .withCredentials("scalable-services",
+        "wisskYCzdY2H10AoxLavB9w3VPSpiewpber1xfNtUSNlXpyhOM7XqvUUX0ocL7US8CF2i8DnlcCyACDbK6Mg8A==")
       .withSSL()
       .build()
 

@@ -12,24 +12,24 @@ class CustomSessionProvider extends CqlSessionProvider {
 
     val ctx = SSLContext.getDefault()
 
-    /*val session = CqlSession.builder()
+    val session = CqlSession.builder()
       .addContactPoint(new InetSocketAddress("scalable-services.cassandra.cosmos.azure.com", 10350))
       .withAuthCredentials("scalable-services",
-        "wisskYCzdY2H10AoxLavB9w3VPSpiewpber1xfNtUSNlXpyhOM7XqvUUX0ocL7US8CF2i8DnlcCyACDbK6Mg8A==")
+        "3wDvFHflBvltSikGAzAvTRdgc7fGYREoEqSeTUV9dW1c9iizH8ySrkNmiK8bEzEI0FflipHZvCeJACDb4kCBcQ==")
       .withSslContext(ctx)
       .withLocalDatacenter("West US")
       .build()
 
-    println("\n\nhere...\n\n")*/
+    println("\n\nusing custom session provider...\n\n")
 
-    val session = CqlSession.builder()
+    /*val session = CqlSession.builder()
       //.addContactPoint(new InetSocketAddress("localhost", 9042))
       //.withAuthCredentials("scalable-services",
         //"wisskYCzdY2H10AoxLavB9w3VPSpiewpber1xfNtUSNlXpyhOM7XqvUUX0ocL7US8CF2i8DnlcCyACDbK6Mg8A==")
       //.withSslContext(ctx)
       //.withLocalDatacenter("West US")
       //.withLocalDatacenter("")
-      .build()
+      .build()*/
 
     Future.successful(session)
   }

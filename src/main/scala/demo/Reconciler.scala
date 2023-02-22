@@ -3,8 +3,13 @@ package demo
 import scala.util.Failure
 import scala.util.Success
 import akka.actor.ActorSystem
+import akka.persistence.cassandra.query.scaladsl.CassandraReadJournal
 import akka.persistence.cassandra.reconciler.Reconciliation
+import akka.persistence.query.PersistenceQuery
 import com.typesafe.config.ConfigFactory
+
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
 object Reconciler {
 
@@ -25,6 +30,8 @@ object Reconciler {
         system.log.error(e, "All persistenceIds migration failed.")
         system.terminate()
     }
+
+    Await.result(system.whenTerminated, Duration.Inf)
   }
 
 }

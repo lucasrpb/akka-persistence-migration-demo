@@ -12,7 +12,7 @@ class MySessionProvider() extends SessionProvider {
     val cluster = Cluster.builder.addContactPoint("scalable-services.cassandra.cosmos.azure.com")
       .withPort(10350)
       .withCredentials("scalable-services",
-        "wisskYCzdY2H10AoxLavB9w3VPSpiewpber1xfNtUSNlXpyhOM7XqvUUX0ocL7US8CF2i8DnlcCyACDbK6Mg8A==")
+        "3wDvFHflBvltSikGAzAvTRdgc7fGYREoEqSeTUV9dW1c9iizH8ySrkNmiK8bEzEI0FflipHZvCeJACDb4kCBcQ==")
       .withSSL()
       .build()
 

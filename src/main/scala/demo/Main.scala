@@ -24,7 +24,7 @@ object Main extends App {
 
  // system.terminate()
 
-  akka.persistence.cassandra.ConfigSessionProvider
+ // akka.persistence.cassandra.ConfigSessionProvider
 
   Await.result(system.whenTerminated, Duration.Inf)
 }

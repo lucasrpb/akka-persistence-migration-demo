@@ -11,9 +11,9 @@ class MySessionProvider() extends SessionProvider {
 
     val cluster = Cluster.builder.addContactPoint("localhost")
       .withPort(10350)
-      //.withCredentials("scalable-services",
-      //  "3wDvFHflBvltSikGAzAvTRdgc7fGYREoEqSeTUV9dW1c9iizH8ySrkNmiK8bEzEI0FflipHZvCeJACDb4kCBcQ==")
-      //.withSSL()
+      .withCredentials("demo",
+        "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
+      .withSSL()
       .build()
 
     val session = cluster.connect()

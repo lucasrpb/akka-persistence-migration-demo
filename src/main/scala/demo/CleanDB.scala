@@ -31,7 +31,7 @@ object CleanDB {
 
     val session = cluster.connect()
 
-    var rs = session.execute(s"truncate table ${k1}.messages;")
+   /* var rs = session.execute(s"truncate table ${k1}.messages;")
     assert(rs.wasApplied())
 
     rs = session.execute(s"truncate table ${k1}.metadata;")
@@ -47,7 +47,10 @@ object CleanDB {
     assert(rs.wasApplied())
 
     rs = session.execute(s"truncate table ${k2}.snapshots;")
-    assert(rs.wasApplied())
+    assert(rs.wasApplied())*/
+
+    val rs = session.execute("alter table akka_dev.messages drop used;")
+    println(rs.wasApplied())
 
     session.close()
     cluster.close()

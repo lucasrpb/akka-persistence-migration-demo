@@ -14,7 +14,7 @@ object CassandraDemo {
 
     val session = CqlSession.builder()
       .addContactPoint(new InetSocketAddress("localhost", 10350))
-      .withAuthCredentials("demo",
+      .withAuthCredentials("local",
         "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
       .withSslContext(ctx)
       .withLocalDatacenter("South Central US")

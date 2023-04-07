@@ -1,7 +1,6 @@
 package demo
 
 import com.datastax.oss.driver.api.core.CqlSession
-import com.datastax.oss.driver.api.core.ssl.SslEngineFactory
 
 import java.net.InetSocketAddress
 import javax.net.ssl.SSLContext

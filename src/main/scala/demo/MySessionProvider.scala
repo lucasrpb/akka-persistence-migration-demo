@@ -1,22 +1,22 @@
 package demo
 
-import akka.persistence.cassandra.SessionProvider
-import com.datastax.driver.core.{Cluster, Session}
+import akka.stream.alpakka.cassandra.CqlSessionProvider
+import com.datastax.oss.driver.api.core.CqlSession
 
+import java.net.InetSocketAddress
 import scala.concurrent.{ExecutionContext, Future}
 
-class MySessionProvider() extends SessionProvider {
+class MySessionProvider() extends CqlSessionProvider {
 
-  override def connect()(implicit ec: ExecutionContext): Future[Session] = {
+  override def connect()(implicit ec: ExecutionContext): Future[CqlSession] = {
 
-    val cluster = Cluster.builder.addContactPoint("localhost")
-      .withPort(10350)
-      .withCredentials("local",
-        "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
-      .withSSL()
+    val session = CqlSession.builder()
+      .addContactPoint(new InetSocketAddress("localhost", 9042))
+      .withAuthCredentials("cassandra", "cassandra")
+      //.withSslContext(ctx)
+      //.withLocalDatacenter("South Central US")
+      .withLocalDatacenter("datacenter1")
       .build()
-
-    val session = cluster.connect()
 
     Future.successful(session)
   }

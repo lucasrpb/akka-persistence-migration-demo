@@ -1,9 +1,8 @@
 package demo
 
-import com.datastax.driver.core.Cluster
-import com.typesafe.config.{Config, ConfigFactory}
+import com.datastax.oss.driver.api.core.CqlSession
 
-import java.io.File
+import java.net.InetSocketAddress
 
 object CleanDB {
 
@@ -18,18 +17,16 @@ object CleanDB {
       .withSSL()
       .build()*/
 
-    val cluster = Cluster.builder.addContactPoint("localhost")
-      .withPort(10350)
-      .withCredentials("local",
-        "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
-      .withSSL()
+    val session = CqlSession.builder()
+      .addContactPoint(new InetSocketAddress("localhost", 9042))
+      .withAuthCredentials("cassandra", "cassandra")
+      //.withSslContext(ctx)
+      //.withLocalDatacenter("South Central US")
       .build()
 
     val isStage = false
     val k1 = if(isStage) "akka_stage" else "akka_dev"
     val k2 = if(isStage) "akka_stage_snapshot" else "akka_dev_snapshot"
-
-    val session = cluster.connect()
 
     var rs = session.execute(s"truncate table ${k1}.messages;")
     assert(rs.wasApplied())
@@ -53,7 +50,6 @@ object CleanDB {
     println(rs.wasApplied())*/
 
     session.close()
-    cluster.close()
 
     println("done")
   }

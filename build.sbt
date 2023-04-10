@@ -1,6 +1,6 @@
 version in ThisBuild := "0.1.0-SNAPSHOT"
 
-scalaVersion in ThisBuild := "2.12.4"
+scalaVersion in ThisBuild := "2.13.10"
 
 lazy val root = (project in file("."))
   .settings(
@@ -9,5 +9,5 @@ lazy val root = (project in file("."))
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-persistence" % "2.6.9",
-  "com.typesafe.akka" %% "akka-persistence-cassandra" % "1.0.6"
+  "com.typesafe.akka" %% "akka-persistence-cassandra" % "1.0.6-dev"
 )

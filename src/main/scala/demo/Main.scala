@@ -16,7 +16,6 @@ object Main extends App {
     "CounterPersistentActor")
 
   counterPersistentActor ! Command(Increment(3))
-  counterPersistentActor ! Command(Increment(3))
   counterPersistentActor ! Checkpoint
 
  // Thread.sleep(1000)

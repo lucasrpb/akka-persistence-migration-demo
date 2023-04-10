@@ -1,3 +1,6 @@
 package demo.models
 
-case class Event(operation: Operation)
+@SerialVersionUID(2L)
+case class Event(operation: Operation){
+
+}

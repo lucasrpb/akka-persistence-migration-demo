@@ -33,6 +33,6 @@
 
 <!--    <logger name="ch.qos.logback" level="ERROR" />-->
 
-    <logger name="org.apache.kafka" level="WARN"/>
+    <logger name="org.apache.kafka" level="DEBUG"/>
 
 </configuration>

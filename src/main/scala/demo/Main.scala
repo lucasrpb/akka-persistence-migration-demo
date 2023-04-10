@@ -10,7 +10,7 @@ import scala.concurrent.duration.Duration
 
 object Main extends App {
 
-  val system = ActorSystem("PersistenceActor", ConfigFactory.load("application.conf"))
+  val system = ActorSystem("PersistenceActor", ConfigFactory.load("application2.conf"))
 
   val counterPersistentActor = system.actorOf(CounterPersistentActor.props("counter-actor"),
     "CounterPersistentActor")

@@ -9,5 +9,5 @@ lazy val root = (project in file("."))
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-persistence" % "2.6.9",
-  "com.typesafe.akka" %% "akka-persistence-cassandra" % "1.0.6-dev"
+  "com.typesafe.akka" %% "akka-persistence-cassandra" % "1.1.0-dev"
 )

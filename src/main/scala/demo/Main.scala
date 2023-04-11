@@ -18,13 +18,5 @@ object Main extends App {
   counterPersistentActor ! Command(Increment(3))
   counterPersistentActor ! Checkpoint
 
- // Thread.sleep(1000)
-
- // system.terminate()
-
- // akka.persistence.cassandra.ConfigSessionProvider
-
-  //system.terminate()
-
   Await.result(system.whenTerminated, Duration.Inf)
 }

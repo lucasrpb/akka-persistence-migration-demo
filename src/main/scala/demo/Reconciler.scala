@@ -16,7 +16,7 @@ object Reconciler {
   def main(args: Array[String]): Unit = {
     // System should have the same Cassandra plugin configuration as your application
     // but be careful to remove seed nodes so this doesn't join the cluster
-    val system = ActorSystem("Reconciler", ConfigFactory.load("application.conf"))
+    val system = ActorSystem("Reconciler", ConfigFactory.load("application2.conf"))
     import system.dispatcher
 
     val rec = new Reconciliation(system)

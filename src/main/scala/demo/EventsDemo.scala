@@ -20,7 +20,7 @@ object EventsDemo {
 
     // System should have the same Cassandra plugin configuration as your application
     // but be careful to remove seed nodes so this doesn't join the cluster
-    val system = ActorSystem("events", ConfigFactory.load("application.conf"))
+    val system = ActorSystem("events", ConfigFactory.load("application2.conf"))
     implicit val mat = SystemMaterializer(system).materializer
 
     val queries = PersistenceQuery(system).readJournalFor[CassandraReadJournal](CassandraReadJournal.Identifier)

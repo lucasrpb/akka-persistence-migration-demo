@@ -21,7 +21,7 @@ object CleanDB {
       .addContactPoint(new InetSocketAddress("localhost", 9042))
       .withAuthCredentials("cassandra", "cassandra")
       //.withSslContext(ctx)
-      //.withLocalDatacenter("South Central US")
+      .withLocalDatacenter("datacenter1")
       .build()
 
     val isStage = false

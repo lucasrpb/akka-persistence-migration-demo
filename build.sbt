@@ -7,7 +7,7 @@ lazy val root = (project in file("."))
     name := "akka-persistence-migration-demo"
   )
 
-val akkaVersion = "2.5.23"
+val akkaVersion = "2.5.32"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-persistence" % "2.5.32",

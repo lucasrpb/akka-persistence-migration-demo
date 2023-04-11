@@ -11,15 +11,15 @@ class MySessionProvider() extends CqlSessionProvider {
 
   override def connect()(implicit ec: ExecutionContext): Future[CqlSession] = {
 
-    val ctx = SSLContext.getDefault()
-
     val session = CqlSession.builder()
-      .addContactPoint(new InetSocketAddress("localhost", 10350))
-      .withAuthCredentials("local", "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
-      .withSslContext(ctx)
-      .withLocalDatacenter("South Central US")
-      //.withLocalDatacenter("datacenter1")
+      .addContactPoint(new InetSocketAddress("localhost", 9042))
+      .withAuthCredentials("cassandra", "cassandra")
+      //.withSslContext(ctx)
+      //.withLocalDatacenter("South Central US")
+      .withLocalDatacenter("datacenter1")
       .build()
+
+    println("\n\nusing custom session provider...\n\n")
 
     Future.successful(session)
   }

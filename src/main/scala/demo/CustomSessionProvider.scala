@@ -41,7 +41,7 @@ class CustomSessionProvider extends CqlSessionProvider {
       .withAuthCredentials("cassandra", "cassandra")
       //.withSslContext(ctx)
       //.withLocalDatacenter("South Central US")
-      .withLocalDatacenter("datacenter1")
+      //.withLocalDatacenter("datacenter1")
       .build()
 
     println("\n\nusing custom session provider...\n\n")

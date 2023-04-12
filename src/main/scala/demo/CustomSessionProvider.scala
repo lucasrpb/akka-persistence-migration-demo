@@ -29,12 +29,14 @@ class CustomSessionProvider extends CqlSessionProvider {
       .build()*/
 
     val session = CqlSession.builder()
-      .addContactPoint(new InetSocketAddress("localhost", 10350))
-      .withAuthCredentials("demo",
+      .addContactPoint(new InetSocketAddress("127.0.0.1", 10350))
+      .withAuthCredentials("local",
         "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
       .withSslContext(ctx)
       .withLocalDatacenter("South Central US")
       .build()
+
+    println(session.getContext.getProtocolVersion.name())
 
     /*val session = CqlSession.builder()
       .addContactPoint(new InetSocketAddress("localhost", 9042))
@@ -43,6 +45,23 @@ class CustomSessionProvider extends CqlSessionProvider {
       //.withLocalDatacenter("South Central US")
       .withLocalDatacenter("datacenter1")
       .build()*/
+
+    val stm = session.prepare(
+      """
+        |select * from akka.messages WHERE
+        |       persistence_id = 'counter-actor' and
+        |       partition_nr = 0
+        |       order by sequence_nr desc limit 1;""".stripMargin)
+
+    val row = session.execute(stm.bind())
+
+    var snr = 0L
+
+    if(row != null){
+      snr = row.one().getLong("sequence_nr")
+    }
+
+    println(s"sequence snr: ${snr}")
 
     println("\n\nusing custom session provider...\n\n")
 

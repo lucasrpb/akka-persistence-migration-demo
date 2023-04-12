@@ -21,6 +21,8 @@ class MySessionProvider() extends CqlSessionProvider {
       //.withLocalDatacenter("datacenter1")
       .build()
 
+
+
     Future.successful(session)
   }
 }

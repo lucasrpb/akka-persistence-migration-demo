@@ -11,3 +11,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-persistence" % "2.6.9",
   "com.typesafe.akka" %% "akka-persistence-cassandra" % "1.1.0"
 )
+
+dependencyOverrides ++= Seq(
+  "com.datastax.oss" % "java-driver-core" % "4.15.0"
+)

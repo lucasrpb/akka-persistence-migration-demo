@@ -11,7 +11,7 @@ val akkaVersion = "2.5.23"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-persistence" % "2.5.23",
-  "com.typesafe.akka" %% "akka-persistence-cassandra" % "0.98"
+  "com.typesafe.akka" %% "akka-persistence-cassandra" % "0.99"
   /*"com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
   "com.typesafe.akka" %% "akka-persistence" % akkaVersion,

@@ -1,24 +1,30 @@
 package demo
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.typed.ActorSystem
+import akka.actor.typed.scaladsl.Behaviors
 import com.typesafe.config.ConfigFactory
-import demo.models.{Checkpoint, Command, Decrement, Increment}
+import demo.models.{Checkpoint, Command, CreateChild, Decrement, Increment}
 import demo.persistence.CounterPersistentActor
 
+import java.util.concurrent.Executors
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 object Main extends App {
 
-  val system = ActorSystem("PersistenceActor", ConfigFactory.load("application.conf"))
+  val system = ActorSystem.create[Nothing](Behaviors.empty[Nothing],
+    "PersistenceActor", ConfigFactory.load("application.conf"))
 
-  val counterPersistentActor = system.actorOf(CounterPersistentActor.props("counter-actor"),
-    "CounterPersistentActor")
+  val counter = system.systemActorOf(CounterPersistentActor("counter"), "CounterActor")
 
-  counterPersistentActor ! Command(Increment(3))
-  counterPersistentActor ! Checkpoint
+  //counter ! Command(Increment(3))
+  counter ! Command(Checkpoint)
 
- // system.terminate()
+  Executors.newSingleThreadExecutor().execute(new Runnable {
+    override def run(): Unit = {
+      counter ! Command(CreateChild("2023-04-11"))
+    }
+  })
 
   Await.result(system.whenTerminated, Duration.Inf)
 }

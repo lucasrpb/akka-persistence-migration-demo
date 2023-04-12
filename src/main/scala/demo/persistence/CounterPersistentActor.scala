@@ -1,57 +1,93 @@
 package demo.persistence
 
-import akka.actor.Props
-import akka.persistence.journal.Tagged
-import akka.persistence.{PersistentActor, SnapshotOffer}
+import akka.actor.typed.scaladsl._
+import akka.actor.typed.{Behavior, SupervisorStrategy}
+import akka.persistence.typed.PersistenceId
+import akka.persistence.typed.scaladsl.{Effect, EventSourcedBehavior}
 import demo.models._
-import demo.persistence.CounterPersistentActor.Response
 
-class CounterPersistentActor(id: String, tag: Option[String] = None) extends PersistentActor {
-
-  override val persistenceId: String = id
-  var state = State(count = 0)
-
-  def updateState(event:Event) {
-    event match {
-      case Event(Increment(count)) => state = State(state.count + count)
-      case Event(Decrement(count)) => state = State(state.count - count)
-    }
-  }
-
-  override def receiveRecover: Receive = {
-    case event: Event =>
-      println(s"\n${Console.GREEN}${Console.BOLD}Actor is currently recovering its state${Console.RESET}\n")
-      updateState(event)
-    case SnapshotOffer(_, snapshot: State) =>
-      println(s"Snapshot data: $snapshot")
-      state = snapshot
-  }
-
-  override def receiveCommand: Receive = {
-    case command @ Command(op) =>
-      println(s"\n${Console.RED}${Console.BOLD}$command is under process${Console.RESET}\n")
-      if(tag.isEmpty) {
-        persist(Event(op)) { event =>
-          updateState(event)
-          sender() ! Response("Done Processing")
-        }
-      } else {
-        persist(Tagged(Event(op), Set("tag2"))) { event =>
-          updateState(event.payload.asInstanceOf[Event])
-          sender() ! Response("Done Processing")
-        }
-      }
-    case Checkpoint =>
-      println(s"\n${Console.MAGENTA}${Console.BOLD}Current State: ${state.count}${Console.RESET}\n")
-      sender() ! Response(s"Current State: ${state.count}")
-  }
-
-}
+import java.util.concurrent.{Executors, ThreadFactory}
+import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.DurationInt
 
 object CounterPersistentActor {
 
-  def props(id: String) = Props(new CounterPersistentActor(id))
+  def eventHandler(state: State, event: Event): State = {
+    println(Console.GREEN_B, s"recovering state...", Console.RESET)
 
-  case class Response(message: String)
+    event match {
+      case Event(increment: Increment) => State(state.count + increment.counter)
+      case Event(decrement: Decrement) => State(state.count - decrement.counter)
+    }
+  }
+
+  def commandHandler(context: ActorContext[Command])(implicit ec: ExecutionContext): (State, Command) => Effect[Event, State] = {
+    (state, cmd) => cmd match {
+      case command @ Command(op) => op match {
+        case cmd: Increment => Effect.persist(Event(cmd)).thenRun { s =>
+          println(Console.MAGENTA_B, s"incremented", Console.RESET)
+          s
+        }
+
+        case cmd: Decrement => Effect.persist(Event(cmd)).thenRun { s =>
+          println(Console.MAGENTA_B, s"decremented ${s}", Console.RESET)
+          s
+        }
+
+        case Checkpoint => Effect.none.thenRun { _ =>
+          println(Console.GREEN_B, s"current state: ${state}", Console.RESET)
+        }
+
+        case CreateChild2(name) =>
+          Effect.none.thenRun { _ =>
+            val actor = context.spawn(Behaviors.receiveMessage[String] {
+              case msg =>
+                println(s"echoing ${msg}...")
+                Behaviors.same
+            }, name)
+
+            actor ! "hi"
+          }
+
+        case CreateChild(name) =>
+
+          Effect.unhandled.thenRun { _ =>
+            println(Console.RED_B, s"create child ${name}...", Console.RESET)
+
+            Executors.newSingleThreadExecutor().execute(new Runnable {
+              override def run(): Unit = {
+                //context.self ! Command(CreateChild2(name))
+
+                /*val actor = context.spawn(Behaviors.receiveMessage[String] {
+                  case msg =>
+                    println(s"echoing ${msg}...")
+                    Behaviors.same
+                }, name)
+
+                actor ! "hi"*/
+              }
+            })
+
+          }
+      }
+
+      case _ => Effect.none
+    }
+  }
+
+  def apply(name: String): Behavior[Command] = {
+    Behaviors.supervise[Command] {
+      Behaviors.setup[Command] { ctx =>
+
+        implicit val ec = ctx.executionContext
+
+        EventSourcedBehavior[Command, Event, State](
+          persistenceId = PersistenceId.ofUniqueId(name),
+          emptyState = State(0),
+          commandHandler = commandHandler(ctx),
+          eventHandler = eventHandler)
+      }
+    }.onFailure[Throwable](SupervisorStrategy.restartWithBackoff(5.seconds, 20.seconds, 0.2))
+  }
 
 }

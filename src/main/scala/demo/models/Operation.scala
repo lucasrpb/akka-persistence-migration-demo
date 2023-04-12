@@ -8,4 +8,9 @@ case class Increment(counter: Int) extends Operation
 case class Decrement(counter: Int) extends Operation
 
 @SerialVersionUID(2L)
+case class CreateChild(name: String) extends Operation
+
+case class CreateChild2(name: String) extends Operation
+
+@SerialVersionUID(2L)
 case object Checkpoint extends Operation

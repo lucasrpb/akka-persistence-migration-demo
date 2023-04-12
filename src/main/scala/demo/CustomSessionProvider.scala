@@ -46,7 +46,7 @@ class CustomSessionProvider extends CqlSessionProvider {
       .withLocalDatacenter("datacenter1")
       .build()*/
 
-    val stm = session.prepare(
+    /*val stm = session.prepare(
       """
         |select * from akka.messages WHERE
         |       persistence_id = 'counter-actor' and
@@ -61,7 +61,7 @@ class CustomSessionProvider extends CqlSessionProvider {
       snr = row.one().getLong("sequence_nr")
     }
 
-    println(s"sequence snr: ${snr}")
+    println(s"sequence snr: ${snr}")*/
 
     println("\n\nusing custom session provider...\n\n")
 
